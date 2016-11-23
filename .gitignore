@@ -60,3 +60,6 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+Content/Main.umap
+Content/Blocks/Mirror.uasset
+Content/Blocks/Mirror.uasset
