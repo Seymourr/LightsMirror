@@ -16,13 +16,13 @@ FString fns = "NewScore.txt";
 FString fp = fd + fn;
 FString fpp = fd + fns;
 
-TArray<FHighScoreNode> UHighScore::setHighScore(FString name, int score)
+TArray<FHighScoreNode> UHighScore::setHighScore(FString name, float score)
 {
 	TArray<FHighScoreNode> curr = getHighScore();
 	FHighScoreNode newScore; newScore.p_name = name; newScore.p_score = score;
 	bool added = false;
 	for (int32 i = 0; i < curr.Num(); ++i) {
-		if (score >= curr[i].p_score) {
+		if (score > curr[i].p_score) {
 			added = true;
 			curr.Insert(newScore, i);
 			break;
@@ -41,14 +41,14 @@ TArray<FHighScoreNode> UHighScore::setHighScore(FString name, int score)
 	if (PlatformFile.CreateDirectoryTree(*fd)) {
 		FString res = "";
 		for (int32 i = 0; i < curr.Num(); ++i) {
-			res += curr[i].p_name + " " + curr[i].p_score + "\n";
+			res += curr[i].p_name + " " + FString::SanitizeFloat(curr[i].p_score)  + "\n";
 		}
 		FFileHelper::SaveStringToFile(res, *fp);
 	}
 	return curr;
 }
 
-void  UHighScore::writeNewScore(int score)
+void  UHighScore::writeNewScore(float score)
 {
 	//Write to file
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
@@ -58,7 +58,7 @@ void  UHighScore::writeNewScore(int score)
 		PlatformFile.CreateDirectory(*fd);
 	}
 	if (PlatformFile.CreateDirectoryTree(*fd)) {
-		FString res = "" + score;
+		FString res = "" + FString::SanitizeFloat(score);
 		FFileHelper::SaveStringToFile(res, *fpp);
 	}
 }
@@ -74,18 +74,18 @@ TArray<FHighScoreNode> UHighScore::getHighScore()
 		FString line = lines[i];
 		FString name, score;
 		line.Split(" ", &name, &score);
-		FHighScoreNode hs; hs.p_name = name; hs.p_score = FCString::Atoi(*score);
+		FHighScoreNode hs; hs.p_name = name; hs.p_score = FCString::Atof(*score);
 		res.Add(hs);
 	}
 	return res;
 }
 
 
-int UHighScore::getNewScore()
+float UHighScore::getNewScore()
 {
 	FString file = "";
-	FFileHelper::LoadFileToString(file, *fp);
-	int res = FCString::Atoi(*file);
+	FFileHelper::LoadFileToString(file, *fpp);
+	float res = FCString::Atof(*file);
 	return res;
 }
 

@@ -9,7 +9,7 @@ USTRUCT(BlueprintType)
 struct FHighScoreNode {
 	GENERATED_USTRUCT_BODY()
 		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Struct")
-		int32 p_score;
+		float p_score;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Struct")
 		FString p_name;
@@ -23,15 +23,15 @@ class LIGHTSMIRROR_API UHighScore : public UBlueprintFunctionLibrary
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "HighScore")
-		static TArray<FHighScoreNode> setHighScore(FString name, int score);
+		static TArray<FHighScoreNode> setHighScore(FString name, float score);
 
 	UFUNCTION(BlueprintCallable, Category = "HighScore")
-		static void writeNewScore(int score);
+		static void writeNewScore(float score);
 
 	UFUNCTION(BlueprintCallable, Category = "HighScore")
 		static TArray<FHighScoreNode> getHighScore();
 
 	UFUNCTION(BlueprintCallable, Category = "HighScore")
-		static int getNewScore();
+		static float getNewScore();
 
 };
